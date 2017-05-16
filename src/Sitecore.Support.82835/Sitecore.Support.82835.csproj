@@ -55,9 +55,6 @@
     <Compile Include="Shell\Applications\ContentEditor\Link.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\zzz\Sitecore.Support.82835.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="web.config" />
   </ItemGroup>
