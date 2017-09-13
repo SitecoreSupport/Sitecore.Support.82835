@@ -7,6 +7,8 @@
     using Sitecore.Web.UI.Sheer;
     using System;
     using System.Collections.Specialized;
+    using System.Net;
+
     public class Link : Sitecore.Shell.Applications.ContentEditor.Link
     {
         public XmlValue XmlValue
@@ -60,8 +62,16 @@
             {
                 if (string.IsNullOrEmpty(args.Result) || !(args.Result != "undefined"))
                     return;
-                //some values like 'text' are already replaced with '&amp;' while some values like 'anchor' are not, so why we need double replacement
-                this.SetValue(Uri.UnescapeDataString(args.Result).Replace("&amp;", "&").Replace("&", "&amp;"));
+                string encodedResult = args.Result;
+                NameValueCollection attributes = HtmlUtil.ParseTagAttributes(args.Result);
+                XmlValue encodedResultAttributes = new XmlValue(args.Result, "link");
+                foreach (var item in attributes)
+                {
+                    string name = item.ToString();
+                    string redecodeValue = WebUtility.HtmlDecode(Uri.UnescapeDataString(attributes[name]));
+                    encodedResultAttributes.SetAttribute(name, redecodeValue);
+                }
+                base.SetValue(encodedResultAttributes.ToString());
                 this.SetModified();
                 Sitecore.Context.ClientPage.ClientResponse.SetAttribute(this.ID, "value", this.Value);
                 SheerResponse.Eval("scContent.startValidators()");
