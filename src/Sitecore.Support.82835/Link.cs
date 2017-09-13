@@ -62,7 +62,6 @@
             {
                 if (string.IsNullOrEmpty(args.Result) || !(args.Result != "undefined"))
                     return;
-                string encodedResult = args.Result;
                 NameValueCollection attributes = HtmlUtil.ParseTagAttributes(args.Result);
                 XmlValue encodedResultAttributes = new XmlValue(args.Result, "link");
                 foreach (var item in attributes)
